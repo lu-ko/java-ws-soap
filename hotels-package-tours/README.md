@@ -8,7 +8,7 @@ Simple Java Gradle project working with database and exposing SOAP web service i
 
 **Last update:** Nov 2015
 
-**Keywords:** [Hibernate](http://hibernate.org/orm/), [Spring MVC, Spring Data](), [Thymeleaf](), [HyperSQL Database Engine (HSQLDB)](http://hsqldb.org/), [IBM WAS Liberty Profile](https://developer.ibm.com/wasdev/), [Gradle](http://gradle.org/), [Maven](https://maven.apache.org/)
+**Keywords:** [Hibernate](http://hibernate.org/orm/), [Spring MVC](http://docs.spring.io/spring/docs/current/spring-framework-reference/html/mvc.html), [Spring Data](http://projects.spring.io/spring-data/), [Thymeleaf](http://www.thymeleaf.org/), [HyperSQL Database Engine (HSQLDB)](http://hsqldb.org/), [IBM WAS Liberty Profile](https://developer.ibm.com/wasdev/), [Gradle](http://gradle.org/), [Maven](https://maven.apache.org/)
 
 ## Assignment:
 
@@ -32,15 +32,13 @@ Every hotel will have exactly one price which is the lowest price for all packag
 10.	Get all active pairs of location/destination and it’s cheapest package (returns list of location/destination, name of hotel, departure, arrival, price and duration of package)
 
 
-## Setup:
+## Setup
 
 Next steps are relevant for [Eclipse IDE](http://www.eclipse.org/downloads/packages/) with [IBM WAS Liberty Profile Adapter](https://developer.ibm.com/wasdev/), [Gradle plugin](https://marketplace.eclipse.org/content/gradle-integration-eclipse-0), [Maven plugin](http://www.eclipse.org/m2e/) and [TestNG plugin](http://testng.org/doc/eclipse.html).
 
-1. Import Gradle project "hpt-core" to Eclipse IDE
+### ```hpt-core```
 
-2. Import Maven project "hpt-schema" to Eclipse IDE
-
-3. Install & configure your [WAS Liberty Profile] instance and copy [server.xml] to ```<your-was-instance>\usr\servers\<your-server-name>\server.xml```
+1. Import Gradle project [hpt-core]() to Eclipse IDE
 
 2. Install & configure [HyperSQL Database Engine (HSQLDB)](http://hsqldb.org/)
 
@@ -48,13 +46,121 @@ Next steps are relevant for [Eclipse IDE](http://www.eclipse.org/downloads/packa
 
 4. Start DB with [startHsqldb.bat]()
 
-1. ```gradle clean build```
+5. Connect to your HSQLDB instance and execute [create_schema_hsql.sql](). Three tables should be created (Destination, Hotel, Package) with no rows.
 
-5. ```mvn clean install```
+6. Build project with ```gradle clean build```
 
-## Notes:
+7. Install & configure [WAS Liberty Profile](https://developer.ibm.com/wasdev/)
 
-* You can integrate ```hpt-schema.jar``` from [hpt-schema] to your application if you want to invoke web services [hpt-core].
+8. Copy content of [server.xml.txt]() to your WAS instance - ```<your-was-instance>/usr/servers/<your-server-name>/server.xml```
 
-* Generated SQL script to drop and create schema: ```target/createSchema.sql```
+9. Deploy WAR to your WAS instance with ```gradle clean deployToLocalhost -Ddropins.dir=<your-was-instance>/usr/servers/<your-server-name>/dropins```
+
+10. Open web browser and go to URL: [http://localhost:9080/hptApp/ui]()
+
+11. To interact with exposed web services you can use any testing tool (e.g. [SoapUi](http://www.soapui.org/)), see [WSDL](http://localhost:9080/hptApp/services/HptService.wsdl)
+
+### ```hpt-schema```
+
+1. Import Maven project (hpt-schema]() to Eclipse IDE
+
+2. Build project with ```mvn clean install```
+
+## Notes
+
+* You can find built ```hpt-schema-X.Y.jar``` in ```target/``` folder of [hpt-schema]() and integrate it to your application if you want to invoke web services [hpt-core](). See [hpt-schema-1.0.jar]() and [build.gradle]() for more details.
+
+* You can find generated SQL scripts to drop and create schema in ```build/``` folder of [hpt-core]().
+
+## Exposed Web Services
+
+See [WSDL](http://localhost:9080/hptApp/services/HptService.wsdl) for more details.
+
+1. Get a list of locations / destinations (optionally search by name)
+  * Operation: findDestination
+  * Possible results: 
+    * a) List of all destinations in the DB (if no destination.name specified)
+    * b) List that contains only one destination with the specified destination.name
+    * c) Empty list (if no destinations in the DB or no destination with specified destination.name)
+
+2. Create location / destination
+  * Operation: createDestination
+  * Possible results: 
+    * a) DB ID of created destination
+    * b) Fault if any error was occured
+
+3. Get a list of hotels (optionally search by location / destination)
+  * Operation: findHotel
+  * Possible results: 
+    * a) List of all hotels (active+inactive) in the DB (if no destination.id specified)
+    * b) List that contains all hotels (active+inactive) with the specified destination.id
+    * c) Empty list (if no hotels in the DB or no hotels with specified destination.id)
+
+4. Create new hotel
+  * Operation: createHotel
+  * Possible results: 
+    * a) DB ID of created hotel
+    * b) Fault if any error was occured
+
+5. Activate / Deactivate hotel
+  * Operation: setHotelActive
+  * Possible results: 
+    * a) Empty response if specified hotel.active was updated in the DB
+    * b) Fault if any error was occured
+
+6. Create package
+  * Operation: createPackage
+  * Possible results: 
+    * a) DB ID of created package
+    * b) Fault if any error was occured
+
+7. Change package price
+  * Operation: setPackagePrice
+  * Possible results: 
+    * a) Empty response if specified package.price was updated in the DB
+    * b) Fault if any error was occured
+
+8. Activate / Deactivate package
+  * Operation: setPackageActive
+  * Possible results: 
+    * a) Empty response if specified package.active was updated in the DB
+    * b) Fault if any error was occured
+
+9. Get a list of locations / destinations, which do not have any active hotels
+  * Operation: destinationsNoActiveHotels
+  * Possible results: 
+    * b) List that contains all destinations with no active hotels or with no hotels
+    * c) Empty list (if no suitable destination exists in the DB)
+
+
+## FAQ
+
+**Q1:** Why must be destination.name and hotel.nam unique?
+**A1:** Because entities have no other attributes (except DB ID) that could be used to differs (e.g. code, address, country).
+
+**Q2:** Why responses contains also ID of entities from DB?
+**A2:** Because entities does not have any other unique identification (e.g. code).
+
+**Q3:** How can I setup hotel to the specific destination?
+**A3:** You have to create hotel (4.WS) with specified hotel.destination.id.
+
+**Q4:** How can I setup package to the specific hotel?
+**A4:** You have to create package (6.WS) with specified package.hotel.id.
+
+**Q5:** Why findHotel (3.WS) returns also inactive hotels?
+**A5:** Because user should know ID of all hotels and packages. Other WS (e.g. activation) expect ID as request parameter.
+
+**Q6:** Why hotel.lowestPrice and destination.lowestPrice do not respect active/inactive attribute?
+**A6:** Because data model specification tells:
+  * "EVERY hotel will have exactly one price which is the lowest price for ALL packages assigned to it."
+    * EVERY means active and inactive (hotels). ALL means active and inactive (packages).
+  * "ANALOGOUSLY there will be the lowest price of packages attached to the location/destination."
+    * ANALOGOUSLY means the same active/inactive logic.
+
+**Q7:** Why 10.WS is not implemented?
+**A7:** Because specification is not clear. This last service should "Get all ACTIVE pairs of location/destination and it’s cheapest package" which is inconsistent with specification of attribute hotel.lowestPrice and destination.lowestPrice (see Q6 and A6). I'm afraid user would be confused if this 10.WS will return one "lowest price" package and destination/hotel will have another "lowest price" attribute. This situation should be discussed with product owner.
+
+**Q8:** What is purpose of dependency [hpt-schema-1.0.jar]()?
+**A8:** This JAR file contains XSD, WSDL and generated Java classes for exposed web services. This dependency can be used in another software to simplify integration with module [hpt-core]() via web services.
+
 

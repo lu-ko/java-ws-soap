@@ -141,7 +141,7 @@ task deployToLocalhost() << {
     
     // default path to deployment
     if (dropins_dir == null) {
-        dropins_dir = "M:\dev\was-liberty\wlp-webProfile7-8.5.5.7\usr\servers\defaultServer\dropins"
+        dropins_dir = "M:/dev/was-liberty/wlp-webProfile7-8.5.5.7/usr/servers/defaultServer/dropins"
     }
     
     println "============ DEPLOY CONFIG =============="

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+<title>HPT - Common parts</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="stylesheet" type="text/css" media="all" href="../css/style.css" th:href="@{/web_content/css/style.css}" />
+</head>
+
+<body>
+
+    <header id="header">
+        <div>
+            <p class="title">Hotels &amp; Package Tours</p>
+        </div>
+    </header>
+
+    <footer id="footer">
+        <div>
+            <p>&copy; 2014 lu-ko. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <div id="overlay-block-div">
+        <div id="overlay-block" class="overlay-block">
+            <img src="../images/loading.gif" th:src="@{/web_content/images/loading.gif}" class="overlay-block-img" />
+        </div>
+    </div>
+
+</body>
+
+</html>

@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions name="HptService" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+    xmlns:tns="http://hpt.elko.sk/hpt/1.0/service" targetNamespace="http://hpt.elko.sk/hpt/1.0/service">
+
+    <wsdl:types>
+        <xsd:schema targetNamespace="http://hpt.elko.sk/hpt/1.0/service">
+            <xsd:include schemaLocation="all_messages.xsd" />
+        </xsd:schema>
+    </wsdl:types>
+
+    <wsdl:message name="findDestinationRequest">
+        <wsdl:part element="tns:findDestinationRequest" name="findDestinationParameters" />
+    </wsdl:message>
+    <wsdl:message name="findDestinationResponse">
+        <wsdl:part element="tns:findDestinationResponse" name="findDestinationResult" />
+    </wsdl:message>
+
+    <wsdl:message name="createDestinationRequest">
+        <wsdl:part element="tns:createDestinationRequest" name="createDestinationParameters" />
+    </wsdl:message>
+    <wsdl:message name="createDestinationResponse">
+        <wsdl:part element="tns:createDestinationResponse" name="createDestinationResult" />
+    </wsdl:message>
+
+    <wsdl:message name="findHotelRequest">
+        <wsdl:part element="tns:findHotelRequest" name="findHotelParameters" />
+    </wsdl:message>
+    <wsdl:message name="findHotelResponse">
+        <wsdl:part element="tns:findHotelResponse" name="findHotelResult" />
+    </wsdl:message>
+
+    <wsdl:message name="createHotelRequest">
+        <wsdl:part element="tns:createHotelRequest" name="createHotelParameters" />
+    </wsdl:message>
+    <wsdl:message name="createHotelResponse">
+        <wsdl:part element="tns:createHotelResponse" name="createHotelResult" />
+    </wsdl:message>
+
+    <wsdl:message name="setHotelActiveRequest">
+        <wsdl:part element="tns:setHotelActiveRequest" name="setHotelActiveParameters" />
+    </wsdl:message>
+    <wsdl:message name="setHotelActiveResponse">
+        <wsdl:part element="tns:setHotelActiveResponse" name="setHotelActiveResult" />
+    </wsdl:message>
+
+    <wsdl:message name="createPackageRequest">
+        <wsdl:part element="tns:createPackageRequest" name="createPackageParameters" />
+    </wsdl:message>
+    <wsdl:message name="createPackageResponse">
+        <wsdl:part element="tns:createPackageResponse" name="createPackageResult" />
+    </wsdl:message>
+
+    <wsdl:message name="setPackagePriceRequest">
+        <wsdl:part element="tns:setPackagePriceRequest" name="setPackagePriceParameters" />
+    </wsdl:message>
+    <wsdl:message name="setPackagePriceResponse">
+        <wsdl:part element="tns:setPackagePriceResponse" name="setPackagePriceResult" />
+    </wsdl:message>
+
+    <wsdl:message name="setPackageActiveRequest">
+        <wsdl:part element="tns:setPackageActiveRequest" name="setPackageActiveParameters" />
+    </wsdl:message>
+    <wsdl:message name="setPackageActiveResponse">
+        <wsdl:part element="tns:setPackageActiveResponse" name="setPackageActiveResult" />
+    </wsdl:message>
+
+    <wsdl:message name="destinationsNoActiveHotelsRequest">
+        <wsdl:part element="tns:destinationsNoActiveHotelsRequest" name="destinationsNoActiveHotelsParameters" />
+    </wsdl:message>
+    <wsdl:message name="destinationsNoActiveHotelsResponse">
+        <wsdl:part element="tns:destinationsNoActiveHotelsResponse" name="destinationsNoActiveHotelsResult" />
+    </wsdl:message>
+
+    <wsdl:portType name="HptService">
+
+        <wsdl:operation name="findDestination">
+            <wsdl:documentation>
+                1. Get a list of locations / destinations (optionally search by name)
+            </wsdl:documentation>
+            <wsdl:input message="tns:findDestinationRequest" name="findDestinationRequest" />
+            <wsdl:output message="tns:findDestinationResponse" name="findDestinationResponse" />
+        </wsdl:operation>
+
+        <wsdl:operation name="createDestination">
+            <wsdl:documentation>
+                2. Create location / destination
+            </wsdl:documentation>
+            <wsdl:input message="tns:createDestinationRequest" name="createDestinationRequest" />
+            <wsdl:output message="tns:createDestinationResponse" name="createDestinationResponse" />
+        </wsdl:operation>
+
+        <wsdl:operation name="findHotel">
+            <wsdl:documentation>
+                3. Get a list of hotels (optionally search by location / destination and price or range of prices)
+            </wsdl:documentation>
+            <wsdl:input message="tns:findHotelRequest" name="findHotelRequest" />
+            <wsdl:output message="tns:findHotelResponse" name="findHotelResponse" />
+        </wsdl:operation>
+
+        <wsdl:operation name="createHotel">
+            <wsdl:documentation>
+                4. Create new hotel
+            </wsdl:documentation>
+            <wsdl:input message="tns:createHotelRequest" name="createHotelRequest" />
+            <wsdl:output message="tns:createHotelResponse" name="createHotelResponse" />
+        </wsdl:operation>
+
+        <wsdl:operation name="setHotelActive">
+            <wsdl:documentation>
+                5. Activate / Deactivate hotel
+            </wsdl:documentation>
+            <wsdl:input message="tns:setHotelActiveRequest" name="setHotelActiveRequest" />
+            <wsdl:output message="tns:setHotelActiveResponse" name="setHotelActiveResponse" />
+        </wsdl:operation>
+
+        <wsdl:operation name="createPackage">
+            <wsdl:documentation>
+                6. Create package
+            </wsdl:documentation>
+            <wsdl:input message="tns:createPackageRequest" name="createPackageRequest" />
+            <wsdl:output message="tns:createPackageResponse" name="createPackageResponse" />
+        </wsdl:operation>
+
+        <wsdl:operation name="setPackagePrice">
+            <wsdl:documentation>
+                7. Change package price
+            </wsdl:documentation>
+            <wsdl:input message="tns:setPackagePriceRequest" name="setPackagePriceRequest" />
+            <wsdl:output message="tns:setPackagePriceResponse" name="setPackagePriceResponse" />
+        </wsdl:operation>
+
+        <wsdl:operation name="setPackageActive">
+            <wsdl:documentation>
+                8. Activate / Deactivate package
+            </wsdl:documentation>
+            <wsdl:input message="tns:setPackageActiveRequest" name="setPackageActiveRequest" />
+            <wsdl:output message="tns:setPackageActiveResponse" name="setPackageActiveResponse" />
+        </wsdl:operation>
+
+        <wsdl:operation name="destinationsNoActiveHotels">
+            <wsdl:documentation>
+                9. Get a list of locations / destinations , which do not have any active hotels
+            </wsdl:documentation>
+            <wsdl:input message="tns:destinationsNoActiveHotelsRequest" name="destinationsNoActiveHotelsRequest" />
+            <wsdl:output message="tns:destinationsNoActiveHotelsResponse" name="destinationsNoActiveHotelsResponse" />
+        </wsdl:operation>
+        
+    </wsdl:portType>
+    
+</wsdl:definitions>

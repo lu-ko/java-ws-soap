@@ -1,0 +1,159 @@
+apply plugin: 'java'
+apply plugin: 'eclipse-wtp'
+apply plugin: 'eclipse'
+apply plugin: 'war'
+apply plugin: 'maven'
+
+group = "sk.elko.hpt"
+version = 1.1
+
+ext {
+    hptSchemaVersion = '1.0'
+}
+
+tasks.withType(JavaCompile) {
+    options.encoding = "UTF-8"
+}
+
+configurations {
+    provided
+}
+eclipse.classpath.plusConfigurations += configurations.provided  
+sourceSets.main.compileClasspath += configurations.provided
+
+repositories {
+    mavenCentral()
+}
+
+war {
+    def buildTime = new Date().format("yyyy-MM-dd HH:mm:ssZ")
+    
+    archiveName "${baseName}-${version}.${extension}"
+    doFirst {
+        println "Expected WAR archive name: " + archiveName
+    }
+    
+    manifest {
+        attributes(
+            'Implementation-Title': 'HPT core',
+            'Implementation-Version': version,
+            'Build-Time': buildTime,
+            'Build-Author': System.getProperty('user.name'),
+            'Build-Tool': 'Gradle ' + gradle.gradleVersion,
+            'Build-JDK': System.getProperty('java.version'),
+            'Source-Compatibility': project.sourceCompatibility,
+            'Target-Compatibility': project.targetCompatibility,
+        )
+    }
+    
+    rootSpec.eachFile {
+        if (it.name == 'application.properties') {
+            println "Replacing properties in " + it.name
+            it.filter(org.apache.tools.ant.filters.ReplaceTokens, tokens: [
+                'BuildTime': buildTime,
+                'HptCoreVersion': version,
+                'HptSchemaVersion': hptSchemaVersion
+            ])
+        }
+    }
+}
+
+dependencies {
+
+    /** Common dependencies (logging, utils, joda time) **/
+    compile 'org.slf4j:log4j-over-slf4j:1.7.6'
+    compile 'org.slf4j:slf4j-jdk14:1.7.6'
+    compile 'commons-lang:commons-lang:2.4'
+    compile 'joda-time:joda-time:2.3'
+    
+    /** Dependencies for Spring (core, beans, context) **/
+    compile 'org.springframework:spring-core:4.0.3.RELEASE'
+    compile 'org.springframework:spring-beans:4.0.3.RELEASE'
+    compile 'org.springframework:spring-context:4.0.3.RELEASE'
+    
+    /** Dependencies for Spring (mvc, web) and Servlet 3 **/
+    compile 'org.springframework:spring-webmvc:4.0.3.RELEASE'
+    compile 'org.springframework:spring-web:4.0.3.RELEASE'
+    compile 'javax.servlet:javax.servlet-api:3.0.1'
+    
+    /** Dependencies for Thymeleaf **/
+    compile 'org.thymeleaf:thymeleaf-spring4:2.1.2.RELEASE'
+    
+    /** Dependencies for Spring (data) and JPA **/
+    compile 'org.springframework.data:spring-data-jpa:1.5.2.RELEASE'
+    compile ('org.hibernate:hibernate-entitymanager:4.0.1.Final') {
+        exclude group:'org.jboss.spec.javax.transaction', module: 'jboss-transaction-api_1.1_spec'
+        exclude group:'org.hibernate.common', module: 'hibernate-commons-annotations'
+    }
+    compile 'commons-dbcp:commons-dbcp:1.4'
+    compile 'org.hibernate:hibernate-commons-annotations:3.2.0.Final'
+    compile 'javax.transaction:jta:1.1'
+    compile 'org.hsqldb:hsqldb:2.2.9'
+    compile 'org.jadira.usertype:usertype.jodatime:2.0.1'
+    
+    /** Dependencies for Spring (ws) **/
+    compile 'org.springframework.ws:spring-ws-core:2.1.4.RELEASE'
+    compile 'org.springframework:spring-oxm:4.0.2.RELEASE'
+    compile files('lib/hpt-schema-'+hptSchemaVersion+'.jar')
+    compile 'org.apache.ws.xmlschema:xmlschema-core:2.1.0'
+
+    /** Testing dependencies **/
+    testCompile 'org.testng:testng:6.8.1'
+    testCompile 'org.springframework:spring-test:4.0.2.RELEASE'
+}
+
+test {
+    ignoreFailures = true
+    
+    def testng_suite = System.getProperty("testng.suite");
+    if (testng_suite == null) {
+        testng_suite = 'src/test/resources/testng/all_tests.xml'
+    }
+    doFirst {
+        println "========= TestNG CONFIG =========="
+        println " - path to TestNG suite XML file = " + testng_suite
+        println "=================================="
+    }
+
+    useTestNG() {
+        suites file(testng_suite)
+    }
+    
+    systemProperties 'property': 'value'
+    
+    afterTest { desc, result ->
+            println "RESULT: Executing test ${desc.name} [${desc.className}] with result: ${result.resultType}\n"
+    }
+    testLogging {
+            exceptionFormat "full" // default is "short"
+            showStandardStreams = "true"
+    }
+    
+    beforeTest { descriptor ->
+       logger.lifecycle("Running test: " + descriptor)
+    }
+}
+
+task deployToLocalhost() << {
+    description "Provides copy of WAR file from build output folder to localhost."
+     
+    def dropins_dir = System.getProperty("dropins.dir");
+    
+    // default path to deployment
+    if (dropins_dir == null) {
+        dropins_dir = "M:\dev\was-liberty\wlp-webProfile7-8.5.5.7\usr\servers\defaultServer\dropins"
+    }
+    
+    println "============ DEPLOY CONFIG =============="
+    println " - path to liberty profile on localhost = " + dropins_dir
+    println "========================================="
+  
+    // invoke copy method
+    println "Copying WAR file to dropins folder ..."
+    copy {
+        from war.archivePath.absolutePath
+        into dropins_dir
+    }
+    println "WAR file copied successfully."
+}
+deployToLocalhost.dependsOn(war, assemble)

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<suite name="Suite - DB tests" verbose="1">
+
+    <test name="Generate DB schema scripts">
+        <classes>
+            <class name="sk.elko.hpt.core.utils.SchemaGeneratorTest" />
+        </classes>
+    </test>
+
+</suite>

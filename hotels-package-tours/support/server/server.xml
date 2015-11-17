@@ -1,0 +1,20 @@
+<server description="new server">
+
+    <!-- Enable features -->
+    <featureManager>
+        <feature>localConnector-1.0</feature>
+        <feature>servlet-3.0</feature>
+        <feature>jndi-1.0</feature>
+        <feature>jdbc-4.0</feature>
+    </featureManager>
+
+    <httpEndpoint host="localhost" httpPort="9080" httpsPort="9443" id="defaultHttpEndpoint" />
+
+    <applicationMonitor updateTrigger="polled" />
+    
+    <webContainer parseUtf8PostData="true" />
+
+    <!-- Module "hpt-core" -->
+    <webApplication id="hptApp" name="hptApp" location="${server.config.dir}/dropins/hpt-core-1.0.war" />
+
+</server>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<suite name="Suite - All tests" verbose="1">
+
+    <test name="All functionality">
+        <packages>
+            <package name="sk.elko.hpt.core.service" />
+            <package name="sk.elko.hpt.core.utils" />
+        </packages>
+    </test>
+
+</suite>

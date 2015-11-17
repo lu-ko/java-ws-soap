@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions name="HptServiceExport_HptServiceHttp_Service" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/"
+    xmlns:port="http://hpt.elko.sk/hpt/1.0/service" xmlns:tns="http://hpt.elko.sk/hpt/1.0/service/Binding" targetNamespace="http://hpt.elko.sk/hpt/1.0/service/Binding">
+    <wsdl:import location="../HptService.wsdl" namespace="http://hpt.elko.sk/hpt/1.0/service" />
+
+    <wsdl:binding name="HptServiceExport_HptServiceHttp_Binding" type="port:HptService">
+        <soap12:binding style="document" transport="http://schemas.xmlsoap.org/soap/http" />
+
+        <wsdl:operation name="findDestination">
+            <soap12:operation soapAction="" />
+            <wsdl:input name="findDestinationRequest">
+                <soap12:body use="literal" />
+            </wsdl:input>
+            <wsdl:output name="findDestinationResponse">
+                <soap12:body use="literal" />
+            </wsdl:output>
+        </wsdl:operation>
+
+        <wsdl:operation name="createDestination">
+            <soap12:operation soapAction="" />
+            <wsdl:input name="createDestinationRequest">
+                <soap12:body use="literal" />
+            </wsdl:input>
+            <wsdl:output name="createDestinationResponse">
+                <soap12:body use="literal" />
+            </wsdl:output>
+        </wsdl:operation>
+
+        <wsdl:operation name="findHotel">
+            <soap12:operation soapAction="" />
+            <wsdl:input name="findHotelRequest">
+                <soap12:body use="literal" />
+            </wsdl:input>
+            <wsdl:output name="findHotelResponse">
+                <soap12:body use="literal" />
+            </wsdl:output>
+        </wsdl:operation>
+
+        <wsdl:operation name="createHotel">
+            <soap12:operation soapAction="" />
+            <wsdl:input name="createHotelRequest">
+                <soap12:body use="literal" />
+            </wsdl:input>
+            <wsdl:output name="createHotelResponse">
+                <soap12:body use="literal" />
+            </wsdl:output>
+        </wsdl:operation>
+
+        <wsdl:operation name="setHotelActive">
+            <soap12:operation soapAction="" />
+            <wsdl:input name="setHotelActiveRequest">
+                <soap12:body use="literal" />
+            </wsdl:input>
+            <wsdl:output name="setHotelActiveResponse">
+                <soap12:body use="literal" />
+            </wsdl:output>
+        </wsdl:operation>
+
+        <wsdl:operation name="createPackage">
+            <soap12:operation soapAction="" />
+            <wsdl:input name="createPackageRequest">
+                <soap12:body use="literal" />
+            </wsdl:input>
+            <wsdl:output name="createPackageResponse">
+                <soap12:body use="literal" />
+            </wsdl:output>
+        </wsdl:operation>
+
+        <wsdl:operation name="setPackagePrice">
+            <soap12:operation soapAction="" />
+            <wsdl:input name="setPackagePriceRequest">
+                <soap12:body use="literal" />
+            </wsdl:input>
+            <wsdl:output name="setPackagePriceResponse">
+                <soap12:body use="literal" />
+            </wsdl:output>
+        </wsdl:operation>
+
+        <wsdl:operation name="setPackageActive">
+            <soap12:operation soapAction="" />
+            <wsdl:input name="setPackageActiveRequest">
+                <soap12:body use="literal" />
+            </wsdl:input>
+            <wsdl:output name="setPackageActiveResponse">
+                <soap12:body use="literal" />
+            </wsdl:output>
+        </wsdl:operation>
+
+        <wsdl:operation name="destinationsNoActiveHotels">
+            <soap12:operation soapAction="" />
+            <wsdl:input name="destinationsNoActiveHotelsRequest">
+                <soap12:body use="literal" />
+            </wsdl:input>
+            <wsdl:output name="destinationsNoActiveHotelsResponse">
+                <soap12:body use="literal" />
+            </wsdl:output>
+        </wsdl:operation>
+        
+    </wsdl:binding>
+
+    <wsdl:service name="HptServiceExport_HptServiceHttp_Service">
+        <wsdl:port binding="tns:HptServiceExport_HptServiceHttp_Binding" name="HptServiceExport_HptServiceHttp_Port">
+            <soap12:address location="http://localhost:9080/hptApp/services" />
+        </wsdl:port>
+    </wsdl:service>
+
+</wsdl:definitions>

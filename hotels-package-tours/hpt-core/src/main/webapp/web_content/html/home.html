@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+<title>HPT - Welcome Page</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="stylesheet" type="text/css" media="all" href="../css/style.css" th:href="@{/web_content/css/style.css}" />
+<script type="text/javascript" src="../script/script.js" th:src="@{/web_content/script/script.js}"></script>
+</head>
+
+<body>
+
+    <div th:include="common :: [//div[@id='overlay-block-div']]"></div>
+
+    <header th:include="common :: [//header[@id='header']]"></header>
+
+    <div>
+        <p>This is enterprise application working with database but with no graphical user interface.</p>
+        <p>
+            All interaction can be processed via exposed web service interface. Please see <a href="services/HptService.wsdl"
+                th:href="@{/services/HptService.wsdl}" target="_blank">WSDL</a>
+        </p>
+    </div>
+
+    <div th:object="${dbState}">
+        <p class="title" th:text="*{'DB state at ' + #joda.format(datetime) + ':'}">DB state at 01.01.2014 11:12:13:</p>
+        <table>
+            <tr>
+                <td>Count of destinations:</td>
+                <td th:text="*{destinations}">1</td>
+            </tr>
+            <tr>
+                <td>Count of hotels:</td>
+                <td th:text="*{hotels}">2</td>
+            </tr>
+            <tr>
+                <td>Count of packages:</td>
+                <td th:text="*{packages}">3</td>
+            </tr>
+        </table>
+    </div>
+
+    <form method="post" action="#" th:action="@{/ui}" onsubmit="disablePage();">
+        <input type="submit" class="button" name="refresh" value="Refresh DB state" />
+    </form>
+
+    <div th:object="${about}">
+        <p class="title">About HPT application:</p>
+        <table>
+            <tr>
+                <td>Build time:</td>
+                <td th:text="*{buildTime}">01.01.2014 11:12:13</td>
+            </tr>
+            <tr>
+                <td>Core version:</td>
+                <td th:text="*{hptCoreVersion}">1.0-SNAPSHOT</td>
+            </tr>
+            <tr>
+                <td>Schema version:</td>
+                <td th:text="*{hptSchemaVersion}">1.0-SNAPSHOT</td>
+            </tr>
+        </table>
+    </div>
+
+    <footer th:include="common :: [//footer[@id='footer']]"></footer>
+
+</body>
+
+</html>

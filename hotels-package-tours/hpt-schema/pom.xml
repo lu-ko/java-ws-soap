@@ -1,0 +1,238 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>sk.elko.hpt</groupId>
+	<artifactId>hpt-schema</artifactId>
+	<packaging>jar</packaging>
+	<version>1.0</version>
+	<name>hpt-schema: WSDL/XML Schema</name>
+	<description>Contains schema definition (XSD) and descriptors of web services (WSDL) for project HPT.</description>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	</properties>
+
+	<dependencies>
+
+	</dependencies>
+
+	<build>
+		<defaultGoal>package</defaultGoal>
+
+		<plugins>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>build-helper-maven-plugin</artifactId>
+				<version>1.7</version>
+				<executions>
+					<execution>
+						<id>add-source</id>
+						<phase>generate-sources</phase>
+						<goals>
+							<goal>add-source</goal>
+						</goals>
+						<configuration>
+							<sources>
+								<source>target/generated-src</source>
+							</sources>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<dependencies>
+					<dependency>
+						<groupId>commons-logging</groupId>
+						<artifactId>commons-logging</artifactId>
+						<version>1.1.1</version>
+					</dependency>
+					<dependency>
+						<groupId>ant-contrib</groupId>
+						<artifactId>ant-contrib</artifactId>
+						<version>1.0b3</version>
+						<scope>compile</scope>
+					</dependency>
+					<dependency>
+						<groupId>ant</groupId>
+						<artifactId>ant-nodeps</artifactId>
+						<version>1.6.5</version>
+					</dependency>
+					<dependency>
+						<groupId>ant</groupId>
+						<artifactId>ant-apache-regexp</artifactId>
+						<version>1.6.5</version>
+					</dependency>
+					<dependency>
+						<artifactId>jakarta-regexp</artifactId>
+						<groupId>jakarta-regexp</groupId>
+						<version>1.4</version>
+					</dependency>
+					<dependency>
+						<groupId>com.sun.xml.ws</groupId>
+						<artifactId>jaxws-tools</artifactId>
+						<version>2.2.6</version>
+					</dependency>
+				</dependencies>
+				<artifactId>maven-antrun-plugin</artifactId>
+				<version>1.1</version>
+				<executions>
+					<execution>
+						<phase>generate-sources</phase>
+						<configuration>
+							<tasks>
+								<property name="generated.src.dir" value="target/generated-src" />
+								<property name="wsdl.dir" value="target/classes/META-INF/wsdl" />
+
+								<taskdef name="for" classname="net.sf.antcontrib.logic.ForTask"
+									classpathref="maven.plugin.classpath" />
+
+								<delete failonerror="false">
+									<fileset dir="${generated.src.dir}" />
+								</delete>
+								<delete failonerror="false">
+									<fileset dir="${wsdl.dir}" />
+								</delete>
+
+								<mkdir dir="${wsdl.dir}" />
+								<mkdir dir="${generated.src.dir}" />
+
+								<copy todir="${wsdl.dir}">
+									<fileset includes="**/*.wsdl,**/*.xsd" dir="src/main/resources" />
+								</copy>
+
+								<echo message="New endpoint URL prefix  :  ${endpointUrlPrefix}" />
+								<replaceregexp match="http://localhost:9080/" replace="${endpointUrlPrefix}">
+									<fileset dir="${wsdl.dir}" includes="**/services/*Export.wsdl" />
+								</replaceregexp>
+
+								<dirname property="metainf.dirname" file="${wsdl.dir}" />
+								<echo message="Location to detect WSDL  :  ${wsdl.dir}" />
+								<for param="wsdlFile">
+									<fileset dir="${wsdl.dir}" includes="**/*Http_Service.wsdl" />
+
+									<sequential>
+										<pathconvert property="location_@{wsdlFile}"
+											targetos="unix">
+											<map from="${metainf.dirname}" to="/META-INF" />
+											<path location="@{wsdlFile}" />
+										</pathconvert>
+
+										<echo message="Processing WSDL file     :  @{wsdlFile}" />
+										<echo message="Processing WSDL location :  ${location_@{wsdlFile}}" />
+										<java fork="true" classpathref="maven.plugin.classpath"
+											classname="com.sun.tools.ws.WsImport">
+											<arg
+												line="-Xendorsed -extension -keep -b jaxbFalse.xml -d target/classes -s ${generated.src.dir} -p sk.elko.hpt.schema -wsdllocation ${location_@{wsdlFile}} @{wsdlFile}" />
+										</java>
+									</sequential>
+								</for>
+							</tasks>
+						</configuration>
+						<goals>
+							<goal>run</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+
+		<pluginManagement>
+			<plugins>
+				<!--This plugin's configuration is used to store Eclipse m2e settings 
+					only. It has no influence on the Maven build itself. -->
+				<plugin>
+					<groupId>org.eclipse.m2e</groupId>
+					<artifactId>lifecycle-mapping</artifactId>
+					<version>1.0.0</version>
+					<configuration>
+						<lifecycleMappingMetadata>
+							<pluginExecutions>
+								<pluginExecution>
+									<pluginExecutionFilter>
+										<groupId>
+											org.codehaus.mojo
+										</groupId>
+										<artifactId>
+											jaxws-maven-plugin
+										</artifactId>
+										<versionRange>
+											[1.12,)
+										</versionRange>
+										<goals>
+											<goal>wsimport</goal>
+										</goals>
+									</pluginExecutionFilter>
+									<action>
+										<ignore></ignore>
+									</action>
+								</pluginExecution>
+								<pluginExecution>
+									<pluginExecutionFilter>
+										<groupId>
+											org.apache.maven.plugins
+										</groupId>
+										<artifactId>
+											maven-antrun-plugin
+										</artifactId>
+										<versionRange>
+											[1.1,)
+										</versionRange>
+										<goals>
+											<goal>run</goal>
+										</goals>
+									</pluginExecutionFilter>
+									<action>
+										<ignore></ignore>
+									</action>
+								</pluginExecution>
+								<pluginExecution>
+									<pluginExecutionFilter>
+										<groupId>
+											org.codehaus.mojo
+										</groupId>
+										<artifactId>
+											build-helper-maven-plugin
+										</artifactId>
+										<versionRange>
+											[1.7,)
+										</versionRange>
+										<goals>
+											<goal>add-source</goal>
+										</goals>
+									</pluginExecutionFilter>
+									<action>
+										<ignore></ignore>
+									</action>
+								</pluginExecution>
+							</pluginExecutions>
+						</lifecycleMappingMetadata>
+					</configuration>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+	</build>
+
+	<profiles>
+		<profile>
+			<id>dev</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+			<properties>
+				<endpointUrlPrefix>http://localhost:9080/</endpointUrlPrefix>
+			</properties>
+		</profile>
+		<profile>
+			<id>custom</id>
+			<activation>
+				<property>
+					<name>endpointUrlPrefix</name>
+				</property>
+			</activation>
+			<properties>
+				<endpointUrlPrefix>${endpointUrlPrefix}</endpointUrlPrefix>
+			</properties>
+		</profile>
+	</profiles>
+
+</project>

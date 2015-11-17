@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:cfps="http://hpt.elko.sk/hpt/1.0/message/HptService"
+    xmlns:tns="http://hpt.elko.sk/hpt/1.0/service" targetNamespace="http://hpt.elko.sk/hpt/1.0/service">
+
+    <xsd:import namespace="http://hpt.elko.sk/hpt/1.0/message/HptService" schemaLocation="../message/HptService/all.xsd" />
+
+    <xsd:element name="findDestinationRequest" type="cfps:FindDestinationRequest" />
+    <xsd:element name="findDestinationResponse" type="cfps:FindDestinationResponse" />
+
+    <xsd:element name="createDestinationRequest" type="cfps:CreateDestinationRequest" />
+    <xsd:element name="createDestinationResponse" type="cfps:CreateDestinationResponse" />
+
+    <xsd:element name="findHotelRequest" type="cfps:FindHotelRequest" />
+    <xsd:element name="findHotelResponse" type="cfps:FindHotelResponse" />
+
+    <xsd:element name="createHotelRequest" type="cfps:CreateHotelRequest" />
+    <xsd:element name="createHotelResponse" type="cfps:CreateHotelResponse" />
+
+    <xsd:element name="setHotelActiveRequest" type="cfps:SetHotelActiveRequest" />
+    <xsd:element name="setHotelActiveResponse" type="cfps:SetHotelActiveResponse" />
+
+    <xsd:element name="createPackageRequest" type="cfps:CreatePackageRequest" />
+    <xsd:element name="createPackageResponse" type="cfps:CreatePackageResponse" />
+
+    <xsd:element name="setPackagePriceRequest" type="cfps:SetPackagePriceRequest" />
+    <xsd:element name="setPackagePriceResponse" type="cfps:SetPackagePriceResponse" />
+
+    <xsd:element name="setPackageActiveRequest" type="cfps:SetPackageActiveRequest" />
+    <xsd:element name="setPackageActiveResponse" type="cfps:SetPackageActiveResponse" />
+
+    <xsd:element name="destinationsNoActiveHotelsRequest" type="cfps:DestinationsNoActiveHotelsRequest" />
+    <xsd:element name="destinationsNoActiveHotelsResponse" type="cfps:DestinationsNoActiveHotelsResponse" />
+    
+</xsd:schema>

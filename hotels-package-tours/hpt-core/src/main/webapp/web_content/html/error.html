@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+<title>HPT - Error Page</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="stylesheet" type="text/css" media="all" href="../css/style.css" th:href="@{/web_content/css/style.css}" />
+
+</head>
+
+<body>
+
+    <header th:include="common :: [//header[@id='header']]"></header>
+    
+    <div>
+        <p>Unexpected error occurred, please contact system administrator!</p>
+        <p>
+            <a href="home.html" th:href="@{/ui/home}">Back to home page</a>
+        </p>
+    </div>
+
+    <footer th:include="common :: [//footer[@id='footer']]"></footer>
+
+</body>
+
+</html>

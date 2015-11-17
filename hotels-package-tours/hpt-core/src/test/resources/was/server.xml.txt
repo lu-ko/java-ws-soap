@@ -15,6 +15,6 @@
     <webContainer parseUtf8PostData="true" />
 
     <!-- Module "hpt-core" -->
-    <webApplication id="hptApp" name="hptApp" location="${server.config.dir}/dropins/hpt-core-1.0.war" />
+    <webApplication id="hptApp" name="hptApp" location="${server.config.dir}/dropins/hpt-core-1.2.war" />
 
 </server>

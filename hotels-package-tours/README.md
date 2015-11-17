@@ -8,7 +8,7 @@ Simple Java Gradle project working with database and exposing SOAP web service i
 
 **Last update:** Nov 2015
 
-**Keywords:** [Hibernate](http://hibernate.org/orm/), [Spring MVC](http://docs.spring.io/spring/docs/current/spring-framework-reference/html/mvc.html), [Spring Data](http://projects.spring.io/spring-data/), [Thymeleaf](http://www.thymeleaf.org/), [HyperSQL Database Engine (HSQLDB)](http://hsqldb.org/), [IBM WAS Liberty Profile](https://developer.ibm.com/wasdev/), [Gradle](http://gradle.org/), [Maven](https://maven.apache.org/)
+**Keywords:** [Hibernate 4.0.1.Final](http://hibernate.org/orm/), [Spring MVC 4.0.3.RELEASE](http://docs.spring.io/spring/docs/current/spring-framework-reference/html/mvc.html), [Spring Data 1.5.2.RELEASE](http://projects.spring.io/spring-data/), [Spring WS 2.1.4.RELEASE](http://projects.spring.io/spring-ws/), [Thymeleaf 2.1.2.RELEASE](http://www.thymeleaf.org/), [HyperSQL Database Engine (HSQLDB)](http://hsqldb.org/), [IBM WAS Liberty Profile](https://developer.ibm.com/wasdev/), [Gradle](http://gradle.org/), [Maven](https://maven.apache.org/)
 
 ## Assignment:
 
@@ -38,39 +38,46 @@ Next steps are relevant for [Eclipse IDE](http://www.eclipse.org/downloads/packa
 
 ### ```hpt-core```
 
-1. Import Gradle project [hpt-core]() to Eclipse IDE
+1. Import Gradle project [hpt-core](https://github.com/lu-ko/java-ws-soap/tree/master/hotels-package-tours/hpt-core) to Eclipse IDE
 
 2. Install & configure [HyperSQL Database Engine (HSQLDB)](http://hsqldb.org/)
 
-3. Open [startHsqldb.bat]() file and set absolute path to your HSQLDB instance
+3. Open [startHsqldb.bat](https://github.com/lu-ko/java-ws-soap/blob/master/hotels-package-tours/hpt-core/src/test/resources/hsqldb/startHsqldb.bat) file and set absolute path to your HSQLDB instance
 
-4. Start DB with [startHsqldb.bat]()
+4. Start DB with [startHsqldb.bat](https://github.com/lu-ko/java-ws-soap/blob/master/hotels-package-tours/hpt-core/src/test/resources/hsqldb/startHsqldb.bat)
 
-5. Connect to your HSQLDB instance and execute [create_schema_hsql.sql](). Three tables should be created (Destination, Hotel, Package) with no rows.
+5. Connect to your HSQLDB instance and execute [create_schema_hsql.sql](https://github.com/lu-ko/java-ws-soap/blob/master/hotels-package-tours/hpt-core/src/test/resources/hsqldb/create_schema_hsql.sql). Three tables should be created (Destination, Hotel, Package) with no rows.
 
-6. Build project with ```gradle clean build```
+6. Build project:
+  * ```gradle clean build``` (with tests) or ```gradle clean install``` (without tests)
 
 7. Install & configure [WAS Liberty Profile](https://developer.ibm.com/wasdev/)
 
-8. Copy content of [server.xml.txt]() to your WAS instance - ```<your-was-instance>/usr/servers/<your-server-name>/server.xml```
+8. Copy content of [server.xml.txt](https://github.com/lu-ko/java-ws-soap/blob/master/hotels-package-tours/hpt-core/src/test/resources/was/server.xml.txt) to your WAS instance:
+  * ```<your-was-instance>/usr/servers/<your-server-name>/server.xml```
 
-9. Deploy WAR to your WAS instance with ```gradle clean deployToLocalhost -Ddropins.dir=<your-was-instance>/usr/servers/<your-server-name>/dropins```
+9. Deploy WAR to your WAS instance:
+  * ```gradle clean deployToLocalhost -Ddropins.dir="<your-was-instance>/usr/servers/<your-server-name>/dropins"```
 
-10. Open web browser and go to URL: [http://localhost:9080/hptApp/ui]()
+10. Open web browser and go to URL: [http://localhost:9080/hptApp/ui](http://localhost:9080/hptApp/ui)
 
-11. To interact with exposed web services you can use any testing tool (e.g. [SoapUi](http://www.soapui.org/)), see [WSDL](http://localhost:9080/hptApp/services/HptService.wsdl)
+11. To interact with exposed web services you can use any testing tool (e.g. [SoapUi](http://www.soapui.org/)), see [http://localhost:9080/hptApp/services/HptService.wsdl](http://localhost:9080/hptApp/services/HptService.wsdl)
 
 ### ```hpt-schema```
 
-1. Import Maven project (hpt-schema]() to Eclipse IDE
+1. Import Maven project [hpt-schema](https://github.com/lu-ko/java-ws-soap/tree/master/hotels-package-tours/hpt-schema) to Eclipse IDE
 
-2. Build project with ```mvn clean install```
+2. Build project:
+  * ```mvn clean install```
 
 ## Notes
 
-* You can find built ```hpt-schema-X.Y.jar``` in ```target/``` folder of [hpt-schema]() and integrate it to your application if you want to invoke web services [hpt-core](). See [hpt-schema-1.0.jar]() and [build.gradle]() for more details.
+* You can find built ```hpt-schema-X.Y.jar``` in ```target/``` folder of [hpt-schema](https://github.com/lu-ko/java-ws-soap/tree/master/hotels-package-tours/hpt-schema) and integrate it to your application if you want to invoke web services [hpt-core](https://github.com/lu-ko/java-ws-soap/tree/master/hotels-package-tours/hpt-core). See [hpt-schema-1.0.jar](https://github.com/lu-ko/java-ws-soap/blob/master/hotels-package-tours/hpt-core/lib/hpt-schema-1.0.jar) and [build.gradle](https://github.com/lu-ko/java-ws-soap/blob/master/hotels-package-tours/hpt-core/build.gradle) for more details.
 
-* You can find generated SQL scripts to drop and create schema in ```build/``` folder of [hpt-core]().
+* You can generated SQL scripts to drop and create schema via [SchemaGeneratorTest.java](https://github.com/lu-ko/java-ws-soap/blob/master/hotels-package-tours/hpt-core/src/test/java/sk/elko/hpt/core/utils/SchemaGeneratorTest.java) TestNG test.
+  * Just invoke [Generate DB schema](https://github.com/lu-ko/java-ws-soap/blob/master/hotels-package-tours/hpt-core/src/test/resources/testng/generate_db_schema.xml) TestNG suite from Gradle:
+    * ```gradle clean test -Dtestng.suite="src/test/resources/testng/generate_db_schema.xml"```.
+  * Output scripts will be located in ```build/``` folder of [hpt-core](https://github.com/lu-ko/java-ws-soap/tree/master/hotels-package-tours/hpt-core).
 
 ## Exposed Web Services
 
@@ -136,31 +143,46 @@ See [WSDL](http://localhost:9080/hptApp/services/HptService.wsdl) for more detai
 ## FAQ
 
 **Q1:** Why must be destination.name and hotel.nam unique?
+
 **A1:** Because entities have no other attributes (except DB ID) that could be used to differs (e.g. code, address, country).
 
+
 **Q2:** Why responses contains also ID of entities from DB?
+
 **A2:** Because entities does not have any other unique identification (e.g. code).
 
+
 **Q3:** How can I setup hotel to the specific destination?
+
 **A3:** You have to create hotel (4.WS) with specified hotel.destination.id.
 
+
 **Q4:** How can I setup package to the specific hotel?
+
 **A4:** You have to create package (6.WS) with specified package.hotel.id.
 
+
 **Q5:** Why findHotel (3.WS) returns also inactive hotels?
+
 **A5:** Because user should know ID of all hotels and packages. Other WS (e.g. activation) expect ID as request parameter.
 
+
 **Q6:** Why hotel.lowestPrice and destination.lowestPrice do not respect active/inactive attribute?
+
 **A6:** Because data model specification tells:
   * "EVERY hotel will have exactly one price which is the lowest price for ALL packages assigned to it."
     * EVERY means active and inactive (hotels). ALL means active and inactive (packages).
   * "ANALOGOUSLY there will be the lowest price of packages attached to the location/destination."
     * ANALOGOUSLY means the same active/inactive logic.
 
+
 **Q7:** Why 10.WS is not implemented?
+
 **A7:** Because specification is not clear. This last service should "Get all ACTIVE pairs of location/destination and it’s cheapest package" which is inconsistent with specification of attribute hotel.lowestPrice and destination.lowestPrice (see Q6 and A6). I'm afraid user would be confused if this 10.WS will return one "lowest price" package and destination/hotel will have another "lowest price" attribute. This situation should be discussed with product owner.
 
-**Q8:** What is purpose of dependency [hpt-schema-1.0.jar]()?
-**A8:** This JAR file contains XSD, WSDL and generated Java classes for exposed web services. This dependency can be used in another software to simplify integration with module [hpt-core]() via web services.
+
+**Q8:** What is purpose of dependency [hpt-schema-1.0.jar](https://github.com/lu-ko/java-ws-soap/blob/master/hotels-package-tours/hpt-core/lib/hpt-schema-1.0.jar)?
+
+**A8:** This JAR file contains XSD, WSDL and generated Java classes for exposed web services. This dependency can be used in another software to simplify integration with module [hpt-core](https://github.com/lu-ko/java-ws-soap/tree/master/hotels-package-tours/hpt-core) via web services. See [Notes](https://github.com/lu-ko/java-ws-soap/tree/master/hotels-package-tours#notes).
 
 

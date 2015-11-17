@@ -5,7 +5,7 @@ apply plugin: 'war'
 apply plugin: 'maven'
 
 group = "sk.elko.hpt"
-version = 1.1
+version = 1.2
 
 ext {
     hptSchemaVersion = '1.0'
@@ -13,6 +13,8 @@ ext {
 
 tasks.withType(JavaCompile) {
     options.encoding = "UTF-8"
+    sourceCompatibility = '1.8'
+    targetCompatibility = '1.8'
 }
 
 configurations {

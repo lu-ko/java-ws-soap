@@ -8,7 +8,7 @@ Simple Java Gradle project working with database and exposing SOAP web service i
 
 **Last update:** Nov 2015
 
-**Keywords:** [Hibernate 4.0.1.Final](http://hibernate.org/orm/), [Spring MVC 4.0.3](http://docs.spring.io/spring/docs/current/spring-framework-reference/html/mvc.html), [Spring Data 1.5.2](http://projects.spring.io/spring-data/), [Spring WS 2.1.4](http://projects.spring.io/spring-ws/), [Thymeleaf 2.1.2](http://www.thymeleaf.org/), [HyperSQL Database Engine (HSQLDB)](http://hsqldb.org/), [IBM WAS Liberty Profile](https://developer.ibm.com/wasdev/), [Gradle](http://gradle.org/), [Maven](https://maven.apache.org/), [TestNG plugin](http://testng.org/), for more details please see [gradle-dependencies.txt](https://github.com/lu-ko/java-ws-soap/blob/master/hotels-package-tours/gradle-dependencies.txt)
+**Keywords:** [Hibernate 4.0.1.Final](http://hibernate.org/orm/), [Spring MVC 4.0.3](http://docs.spring.io/spring/docs/current/spring-framework-reference/html/mvc.html), [Spring Data 1.5.2](http://projects.spring.io/spring-data/), [Spring WS 2.1.4](http://projects.spring.io/spring-ws/), [Thymeleaf 2.1.2](http://www.thymeleaf.org/), [HyperSQL Database Engine (HSQLDB)](http://hsqldb.org/), [IBM WAS Liberty Profile](https://developer.ibm.com/wasdev/), [Gradle](http://gradle.org/), [Maven](https://maven.apache.org/), [TestNG](http://testng.org/), for more details please see [gradle-dependencies.txt](https://github.com/lu-ko/java-ws-soap/blob/master/hotels-package-tours/gradle-dependencies.txt)
 
 ## Assignment:
 

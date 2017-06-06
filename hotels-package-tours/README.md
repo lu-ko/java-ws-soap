@@ -6,9 +6,9 @@ Simple Java Gradle project working with database and exposing SOAP web service i
 
 **Created:** Aug 2014
 
-**Last update:** Nov 2015
+**Last update:** Jun 2017
 
-**Keywords:** [Hibernate 4.0.1.Final](http://hibernate.org/orm/), [Spring MVC 4.0.3](http://docs.spring.io/spring/docs/current/spring-framework-reference/html/mvc.html), [Spring Data 1.5.2](http://projects.spring.io/spring-data/), [Spring WS 2.1.4](http://projects.spring.io/spring-ws/), [Thymeleaf 2.1.2](http://www.thymeleaf.org/), [HyperSQL Database Engine (HSQLDB)](http://hsqldb.org/), [IBM WAS Liberty Profile](https://developer.ibm.com/wasdev/), [Gradle](http://gradle.org/), [Maven](https://maven.apache.org/), [TestNG](http://testng.org/), for more details please see [gradle-dependencies.txt](https://github.com/lu-ko/java-ws-soap/blob/master/hotels-package-tours/gradle-dependencies.txt)
+**Keywords:** [Hibernate 5.2.10.Final](http://hibernate.org/orm/), [Spring MVC 4.3.7.RELEASE](http://docs.spring.io/spring/docs/current/spring-framework-reference/html/mvc.html), [Spring Data 1.11.3.RELEASE](http://projects.spring.io/spring-data/), [Spring WS 2.4.0.RELEASE](http://projects.spring.io/spring-ws/), [Thymeleaf 2.1.2](http://www.thymeleaf.org/), [HyperSQL Database Engine (HSQLDB) 2.4.0](http://hsqldb.org/), [IBM WAS Liberty Profile](https://developer.ibm.com/wasdev/), [Gradle](http://gradle.org/), [Maven](https://maven.apache.org/), [TestNG](http://testng.org/), for more details please see [gradle-dependencies.txt](https://github.com/lu-ko/java-ws-soap/blob/master/hotels-package-tours/gradle-dependencies.txt)
 
 ## Assignment:
 
@@ -46,7 +46,7 @@ Next steps are relevant for [Eclipse IDE](http://www.eclipse.org/downloads/packa
 
 4. Start DB with [startHsqldb.bat](https://github.com/lu-ko/java-ws-soap/blob/master/hotels-package-tours/hpt-core/src/test/resources/hsqldb/startHsqldb.bat)
 
-5. Connect to your HSQLDB instance and execute [create_schema_hsql.sql](https://github.com/lu-ko/java-ws-soap/blob/master/hotels-package-tours/hpt-core/src/test/resources/hsqldb/create_schema_hsql.sql). Three tables should be created (Destination, Hotel, Package) with no rows.
+5. Connect to your HSQLDB instance and execute [schema_hsql.sql](https://github.com/lu-ko/java-ws-soap/blob/master/hotels-package-tours/hpt-core/src/test/resources/hsqldb/schema_hsql.sql). Three tables should be created (Destination, Hotel, Package) with no rows.
 
 6. Build project:
   * ```gradle clean build``` (with tests) or ```gradle clean install``` (without tests)

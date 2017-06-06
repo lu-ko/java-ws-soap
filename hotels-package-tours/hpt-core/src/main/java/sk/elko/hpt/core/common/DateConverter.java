@@ -1,5 +1,9 @@
 package sk.elko.hpt.core.common;
 
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
@@ -8,12 +12,9 @@ import javax.xml.datatype.XMLGregorianCalendar;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.joda.time.DateTime;
-import org.joda.time.format.DateTimeFormat;
 
 /**
- * Helper class used for simple date and time transformation between {@link XMLGregorianCalendar} and Joda's
- * {@link DateTime}.
+ * Helper class used for simple date and time transformation between {@link XMLGregorianCalendar} and {@link LocalDateTime}.
  */
 public class DateConverter {
     private static final Log log = LogFactory.getLog(DateConverter.class);
@@ -58,42 +59,42 @@ public class DateConverter {
     }
 
     /**
-     * Transforms {@link XMLGregorianCalendar} to Joda {@link DateTime}.
+     * Transforms {@link XMLGregorianCalendar} to {@link LocalDateTime}.
      * 
      * @param xmlGregorianCalendar
      *            {@link XMLGregorianCalendar}
-     * @return {@link DateTime}
+     * @return {@link LocalDateTime}
      */
-    public static DateTime getJodaDateTime(XMLGregorianCalendar xmlGregorianCalendar) {
+    public static LocalDateTime getLocalDate(XMLGregorianCalendar xmlGregorianCalendar) {
         if (xmlGregorianCalendar == null) {
             return null;
         } else {
-            return new DateTime(xmlGregorianCalendar.toGregorianCalendar().getTime());
+            return LocalDateTime.from(Instant.ofEpochMilli(xmlGregorianCalendar.toGregorianCalendar().getTime().getTime()));
         }
     }
 
     /**
-     * Transforms {@link DateTime} to {@link javax.xml.datatype.XMLGregorianCalendar}.
+     * Transforms {@link LocalDateTime} to {@link javax.xml.datatype.XMLGregorianCalendar}.
      * 
-     * @param jodaDateTime
-     *            {@link DateTime}
+     * @param javaDateTime
+     *            {@link LocalDateTime}
      * @return {@link javax.xml.datatype.XMLGregorianCalendar}
      */
-    public static XMLGregorianCalendar getXMLGregorianCalendar(DateTime jodaDateTime) {
-        if (jodaDateTime == null) {
+    public static XMLGregorianCalendar getXMLGregorianCalendar(LocalDateTime javaDateTime) {
+        if (javaDateTime == null) {
             return null;
         }
-        GregorianCalendar calendar = gregorianCalendar.get();
-        calendar.setTime(jodaDateTime.toDate());
+        GregorianCalendar calendar = GregorianCalendar.from(javaDateTime.atZone(ZoneId.systemDefault()));
 
         return dateTypeFactory.get().newXMLGregorianCalendar(calendar);
 
     }
 
-    public static String formatDateTime(final DateTime dateTime) {
+    public static String formatDateTime(final LocalDateTime dateTime) {
         String dateTimeString = "-";
         if (dateTime != null) {
-            dateTimeString = DateTimeFormat.forPattern(DEFAULT_PATTERN).print(dateTime);
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern(DEFAULT_PATTERN);
+            dateTimeString = dateTime.format(formatter);
         }
         return dateTimeString;
     }

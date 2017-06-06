@@ -2,7 +2,6 @@ package sk.elko.hpt.core.controller;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,6 +14,8 @@ import sk.elko.hpt.core.service.AppVersionService;
 import sk.elko.hpt.core.service.DestinationService;
 import sk.elko.hpt.core.service.HotelService;
 import sk.elko.hpt.core.service.PackageService;
+
+import java.time.LocalDateTime;
 
 /**
  * Simple controller to render home/welcome page with count of entities in DB.
@@ -43,7 +44,7 @@ public class MainController {
         dbStateForm.setDestinations(destinationService.findAll().size());
         dbStateForm.setHotels(hotelService.findAll().size());
         dbStateForm.setPackages(packageService.findAll().size());
-        dbStateForm.setDatetime(new DateTime());
+        dbStateForm.setDatetime(LocalDateTime.now());
         model.addAttribute("dbState", dbStateForm);
 
         AboutForm aboutForm = new AboutForm();

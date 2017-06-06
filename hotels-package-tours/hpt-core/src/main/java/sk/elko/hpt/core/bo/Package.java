@@ -7,9 +7,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-
-import org.hibernate.annotations.Type;
-import org.joda.time.DateTime;
+import java.time.LocalDateTime;
 
 /**
  * TODO destination improvement: add some unique attribute for identification (e.g. 'code')<br />
@@ -22,12 +20,12 @@ public class Package {
     private Long id;
 
     @Column(unique = false, updatable = false, nullable = false)
-    @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
-    private DateTime arrival;
+    // @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
+    private LocalDateTime arrival;
 
     @Column(unique = false, updatable = false, nullable = false)
-    @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
-    private DateTime departure;
+    // @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
+    private LocalDateTime departure;
 
     @Column(unique = false, updatable = true, nullable = false)
     private double price;
@@ -49,19 +47,19 @@ public class Package {
         this.id = id;
     }
 
-    public DateTime getArrival() {
+    public LocalDateTime getArrival() {
         return arrival;
     }
 
-    public void setArrival(DateTime arrival) {
+    public void setArrival(LocalDateTime arrival) {
         this.arrival = arrival;
     }
 
-    public DateTime getDeparture() {
+    public LocalDateTime getDeparture() {
         return departure;
     }
 
-    public void setDeparture(DateTime departure) {
+    public void setDeparture(LocalDateTime departure) {
         this.departure = departure;
     }
 

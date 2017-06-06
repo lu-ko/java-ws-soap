@@ -1,13 +1,13 @@
 package sk.elko.hpt.core.controller.form;
 
-import org.joda.time.DateTime;
+import java.time.LocalDateTime;
 
 public class DbStateForm {
 
     private int destinations;
     private int hotels;
     private int packages;
-    private DateTime datetime;
+    private LocalDateTime datetime;
 
     public int getDestinations() {
         return destinations;
@@ -33,11 +33,11 @@ public class DbStateForm {
         this.packages = packages;
     }
 
-    public DateTime getDatetime() {
+    public LocalDateTime getDatetime() {
         return datetime;
     }
 
-    public void setDatetime(DateTime datetime) {
+    public void setDatetime(LocalDateTime datetime) {
         this.datetime = datetime;
     }
 

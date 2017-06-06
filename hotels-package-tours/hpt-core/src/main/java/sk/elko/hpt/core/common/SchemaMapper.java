@@ -100,8 +100,8 @@ public class SchemaMapper {
         }
         bo.setPrice(ws.getPrice());
         bo.setActive(ws.isActive());
-        bo.setArrival(DateConverter.getJodaDateTime(ws.getArrival()));
-        bo.setDeparture(DateConverter.getJodaDateTime(ws.getDeparture()));
+        bo.setArrival(DateConverter.getLocalDate(ws.getArrival()));
+        bo.setDeparture(DateConverter.getLocalDate(ws.getDeparture()));
         bo.setHotel(toBo(ws.getHotel()));
 
         return bo;

@@ -1,11 +1,11 @@
 package sk.elko.hpt.core.service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
-import org.joda.time.DateTime;
 
 import sk.elko.hpt.core.bo.Destination;
 import sk.elko.hpt.core.bo.Hotel;
@@ -16,8 +16,8 @@ import sk.elko.hpt.core.config.AbstractTestContext;
 public class PackageTest extends AbstractTestContext {
 
     private final double EXPECTED_PRICE = System.currentTimeMillis();
-    private final DateTime EXPECTED_ARRIVAL = new DateTime().plusDays(3);
-    private final DateTime EXPECTED_DEPARTURE = new DateTime().plusDays(10);
+    private final LocalDateTime EXPECTED_ARRIVAL = LocalDateTime.now().plusDays(3);
+    private final LocalDateTime EXPECTED_DEPARTURE = EXPECTED_ARRIVAL.plusDays(10);
     private int sizeAll = 0;
     private Hotel hotel = null;
 

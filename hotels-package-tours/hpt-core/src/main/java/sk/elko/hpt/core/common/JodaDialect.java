@@ -1,5 +1,7 @@
 package sk.elko.hpt.core.common;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -8,8 +10,6 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.joda.time.DateTime;
-import org.joda.time.format.DateTimeFormat;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.servlet.support.RequestContextUtils;
 import org.thymeleaf.context.IProcessingContext;
@@ -17,8 +17,10 @@ import org.thymeleaf.dialect.AbstractDialect;
 import org.thymeleaf.dialect.IExpressionEnhancingDialect;
 
 /**
- * A Thymeleaf dialect that provide {@link Joda} expression object. This object can be used to format Joda's
- * {@link DateTime} objects in your Thymeleaf pages.
+ * A Thymeleaf dialect that provide {@link Joda} expression object. This object can be used to format Java's
+ * {@link LocalDateTime} objects in your Thymeleaf pages.
+ *
+ * It's called Joda due to historical reasons (usage of Joda time in Java 7).
  */
 public class JodaDialect extends AbstractDialect implements IExpressionEnhancingDialect {
     private static final Log log = LogFactory.getLog(JodaDialect.class);
@@ -66,31 +68,32 @@ public class JodaDialect extends AbstractDialect implements IExpressionEnhancing
         private final static String DEFAULT_PATTERN = "dd.MM.yyyy HH:mm:ss";
 
         /**
-         * Prints out a formatted Joda's {@link DateTime} instance given as parameter {@code dateTime} with the default
+         * Prints out a formatted Joda's {@link LocalDateTime} instance given as parameter {@code dateTime} with the default
          * pattern {@link Joda#DEFAULT_PATTERN}.
          * 
          * @param dateTime
          *            Joda's datetime
          * @return Formatted string
          */
-        public String format(final DateTime dateTime) {
+        public String format(final LocalDateTime dateTime) {
             return format(dateTime, DEFAULT_PATTERN);
         }
 
         /**
-         * Prints out a formatted Joda's {@link DateTime} instance given as parameter {@code dateTime} with pattern
+         * Prints out a formatted {@link LocalDateTime} instance given as parameter {@code dateTime} with pattern
          * given as second parameter {@code pattern}.
          * 
          * @param dateTime
-         *            Joda's datetime
+         *            Java's datetime
          * @param pattern
-         *            Pattern used by the {@link DateTimeFormat#forPattern(String)} method
+         *            Pattern used by the {@link DateTimeFormatter#ofPattern(String)} method
          * @return Formatted string
          */
-        public String format(final DateTime dateTime, String pattern) {
+        public String format(final LocalDateTime dateTime, String pattern) {
             String dateTimeString = "-";
             if (dateTime != null) {
-                dateTimeString = DateTimeFormat.forPattern(pattern).withLocale(getLocale()).print(dateTime);
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern(pattern);
+                dateTimeString = dateTime.format(formatter);
             }
             return dateTimeString;
         }

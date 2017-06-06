@@ -3,15 +3,18 @@ package sk.elko.hpt.core.utils;
 import java.io.File;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.EnumSet;
 import java.util.List;
 
-import org.hibernate.cfg.Configuration;
+import org.hibernate.boot.MetadataSources;
+import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.tool.hbm2ddl.SchemaExport;
+import org.hibernate.tool.schema.TargetType;
 import org.springframework.util.StringUtils;
 import org.testng.annotations.Test;
 
 import sk.elko.hpt.core.config.AbstractTestContext;
-import sk.elko.hpt.core.config.DbConfig;
+import sk.elko.hpt.core.config.DatabaseConfig;
 
 /**
  * Test to generate DDL scripts.
@@ -20,65 +23,57 @@ public class SchemaGeneratorTest extends AbstractTestContext {
 
     @Test
     public void generate_create_and_drop_script() throws Exception {
-        SchemaGenerator gen = new SchemaGenerator(DbConfig.DB_BO_PACKAGE, null);
-
-        // generate DROP script
-        gen.generate(Dialect.HSQL, true);
-
-        // generate CREATE script
-        gen.generate(Dialect.HSQL, false);
+        SchemaGenerator gen = new SchemaGenerator(DatabaseConfig.DB_BO_PACKAGE, null, Dialect.HSQL);
+        gen.generate();
     }
 
     private class SchemaGenerator {
 
-        private Configuration cfg;
+        private Dialect dialect;
+        private MetadataSources metadata;
 
-        public SchemaGenerator(String packageName, String defaultSchema) throws Exception {
+        public SchemaGenerator(String packageName, String defaultSchema, Dialect dbDialect) throws Exception {
             if (!StringUtils.hasText(packageName)) {
                 throw new IllegalArgumentException("Given package name is empty!");
             }
+            dialect = dbDialect;
 
-            cfg = new Configuration();
-            cfg.setProperty("hibernate.hbm2ddl.auto", "create");
+            StandardServiceRegistryBuilder builder = new StandardServiceRegistryBuilder();
+            builder = builder.applySetting("hibernate.dialect", dialect.getDialectClass());
+            builder = builder.applySetting("hibernate.hbm2ddl.auto", "create");
 
             if (StringUtils.hasText(defaultSchema)) {
-                cfg.setProperty("hibernate.default_schema", defaultSchema);
+                builder.applySetting("hibernate.default_schema", defaultSchema);
             }
 
+            metadata = new MetadataSources(builder.build());
+
             for (Class<?> clazz : getClasses(packageName)) {
-                cfg.addAnnotatedClass(clazz);
+                metadata.addAnnotatedClass(clazz);
             }
         }
 
         /**
-         * Method that actually creates the DDL file.
-         * 
-         * @param dbDialect
-         *            {@link Dialect} to use
-         * @param dropOrCreate
-         *            If {@code true}, only DROP script will be produced. Otherwise only CREATE script will be produced.
+         * Method that actually creates the DDL script.
          */
-        public void generate(Dialect dbDialect, boolean dropOrCreate) {
-            cfg.setProperty("hibernate.dialect", dbDialect.getDialectClass());
-
-            SchemaExport export = new SchemaExport(cfg);
+        public void generate() {
+            SchemaExport export = new SchemaExport();
             export.setDelimiter(";");
             export.setFormat(true);
             export.setHaltOnError(true);
-            export.setOutputFile(getFilePath(dbDialect.name(), dropOrCreate));
-            export.execute(true, false, dropOrCreate, !dropOrCreate);
+            export.setOutputFile(getFilePath(dialect.name()));
+            export.create(EnumSet.of(TargetType.STDOUT, TargetType.SCRIPT), metadata.buildMetadata());
         }
 
-        private String getFilePath(String dialectName, boolean dropOrCreate) {
-            return "build/" + (dropOrCreate ? "drop" : "create") + "_schema_" + dialectName.toLowerCase() + ".sql";
+        private String getFilePath(String dialectName) {
+            return "build/schema_" + dialectName.toLowerCase() + ".sql";
 
         }
 
         /**
          * Utility method used to fetch Class list based on a package name.
-         * 
-         * @param packageName
-         *            (should be the package containing your annotated beans.
+         *
+         * @param packageName (should be the package containing your annotated beans.
          */
         private List<Class<?>> getClasses(String packageName) throws Exception {
             List<Class<?>> classes = new ArrayList<Class<?>>();

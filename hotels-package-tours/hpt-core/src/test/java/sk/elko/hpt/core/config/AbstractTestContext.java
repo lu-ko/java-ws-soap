@@ -16,7 +16,7 @@ import sk.elko.hpt.core.service.PackageService;
  * TODO: test improvement: rollback transactions after execution to achieve clean DB<br />
  * TODO: test improvement: add support for parallel tests<br />
  */
-@ContextConfiguration(classes = { CoreConfig.class, TestDbConfig.class })
+@ContextConfiguration(classes = { CoreConfig.class, DatabaseConfig.class })
 public abstract class AbstractTestContext extends AbstractTestNGSpringContextTests {
     private static final Log log = LogFactory.getLog(AbstractTestContext.class);
 

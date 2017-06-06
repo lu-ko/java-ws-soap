@@ -6,9 +6,11 @@ import javax.sql.DataSource;
 import org.apache.commons.dbcp.BasicDataSource;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.hibernate.dialect.HSQLDialect;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.core.env.Environment;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.orm.hibernate4.HibernateExceptionTranslator;
 import org.springframework.orm.jpa.JpaTransactionManager;
@@ -18,29 +20,30 @@ import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 /**
- * Testing DB config. Now it is the same DB but tests do not drop/create schema.
- * 
- * @see DbConfig
+ * Production DB config.
  */
 @Configuration
+@PropertySource("classpath:sk/elko/hpt/core/application.properties")
 @EnableJpaRepositories(basePackages = "sk.elko.hpt.core.repository")
 @EnableTransactionManagement
-public class TestDbConfig {
-    private static final Log log = LogFactory.getLog(TestDbConfig.class);
+public class DatabaseConfig {
+    private static final Log log = LogFactory.getLog(DatabaseConfig.class);
 
-    private final String DB_URL = "jdbc:hsqldb:hsql://localhost/HptDB";
-    private final String DB_USERNAME = "sa";
-    private final String DB_PASSWORD = "";
+    public static final String DB_BO_PACKAGE = "sk.elko.hpt.core.bo";
+
+    @Autowired
+    private Environment env;
 
     @Bean
     public DataSource dataSource() {
-        log.info("dataSource - Initializing TEST HSQL dataSource. Connecting to: " + DB_URL);
+        log.info("Initializing DataSource - Connecting to: " + env.getProperty("db.url"));
 
         BasicDataSource dataSource = new BasicDataSource();
-        dataSource.setDriverClassName(org.hsqldb.jdbcDriver.class.getName());
-        dataSource.setUrl(DB_URL);
-        dataSource.setUsername(DB_USERNAME);
-        dataSource.setPassword(DB_PASSWORD);
+        dataSource.setDriverClassName(env.getProperty("db.driver_class"));
+        dataSource.setUrl(env.getProperty("db.url"));
+        dataSource.setUsername(env.getProperty("db.username"));
+        dataSource.setPassword(env.getProperty("db.password"));
+
         return dataSource;
     }
 
@@ -48,14 +51,18 @@ public class TestDbConfig {
     public EntityManagerFactory entityManagerFactory() {
         HibernateJpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
         vendorAdapter.setGenerateDdl(true);
-        vendorAdapter.setShowSql(true);
-        vendorAdapter.setDatabasePlatform(HSQLDialect.class.getName());
+        vendorAdapter.setShowSql(env.getProperty("hibernate.show_sql", Boolean.class));
+        vendorAdapter.setDatabasePlatform(env.getProperty("hibernate.dialect"));
 
         LocalContainerEntityManagerFactoryBean factory = new LocalContainerEntityManagerFactoryBean();
         factory.setJpaVendorAdapter(vendorAdapter);
-        factory.setPackagesToScan(DbConfig.DB_BO_PACKAGE);
+        factory.setPackagesToScan(DB_BO_PACKAGE);
         factory.setDataSource(dataSource());
-        factory.getJpaPropertyMap().put("hibernate.hbm2ddl.auto", "none");
+
+        factory.getJpaPropertyMap().put("hibernate.connection.charSet", env.getProperty("hibernate.connection.charSet"));
+        factory.getJpaPropertyMap().put("hibernate.connection.characterEncoding", env.getProperty("hibernate.connection.characterEncoding"));
+        factory.getJpaPropertyMap().put("hibernate.hbm2ddl.auto", env.getProperty("hibernate.hbm2ddl.auto"));
+
         factory.afterPropertiesSet();
 
         return factory.getObject();
@@ -73,5 +80,4 @@ public class TestDbConfig {
     public HibernateExceptionTranslator hibernateExceptionTranslator() {
         return new HibernateExceptionTranslator();
     }
-
 }

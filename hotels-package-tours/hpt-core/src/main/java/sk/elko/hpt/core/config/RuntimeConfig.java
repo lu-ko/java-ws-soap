@@ -6,7 +6,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 
 @Configuration
 @EnableScheduling
-@Import({ DbConfig.class })
+@Import({ DatabaseConfig.class })
 public class RuntimeConfig {
 
 }

@@ -36,7 +36,16 @@ Every hotel will have exactly one price which is the lowest price for all packag
 
 Next steps are relevant for [Eclipse IDE](http://www.eclipse.org/downloads/packages/) with [IBM WAS Liberty Profile Adapter](https://developer.ibm.com/wasdev/), [Gradle plugin](https://marketplace.eclipse.org/content/gradle-integration-eclipse-0), [Maven plugin](http://www.eclipse.org/m2e/) and [TestNG plugin](http://testng.org/doc/eclipse.html).
 
-### ```hpt-core```
+
+### Build module ```hpt-schema```
+
+1. Import Maven project [hpt-schema](https://github.com/lu-ko/java-ws-soap/tree/master/hotels-package-tours/hpt-schema) to Eclipse IDE
+
+2. Build project:
+  * ```mvn clean install```
+
+
+### Build module ```hpt-core```
 
 1. Import Gradle project [hpt-core](https://github.com/lu-ko/java-ws-soap/tree/master/hotels-package-tours/hpt-core) to Eclipse IDE
 
@@ -51,24 +60,23 @@ Next steps are relevant for [Eclipse IDE](http://www.eclipse.org/downloads/packa
 6. Build project:
   * ```gradle clean build``` (with tests) or ```gradle clean install``` (without tests)
 
-7. Install & configure [WAS Liberty Profile](https://developer.ibm.com/wasdev/)
 
-8. Copy content of [server.xml.txt](https://github.com/lu-ko/java-ws-soap/blob/master/hotels-package-tours/hpt-core/src/test/resources/was/server.xml.txt) to your WAS instance:
-  * ```<your-was-instance>/usr/servers/<your-server-name>/server.xml```
+### Deployment and first startup
 
-9. Deploy WAR to your WAS instance:
-  * ```gradle clean deployToLocalhost -Ddropins.dir="<your-was-instance>/usr/servers/<your-server-name>/dropins"```
+1. Install & configure application server
+  * E.g. [WAS Liberty Profile](https://developer.ibm.com/wasdev/)
 
-10. Open web browser and go to URL: [http://localhost:9080/hptApp/ui](http://localhost:9080/hptApp/ui)
+2. Setup deployment regarding choosen application server
+  * E.g. In case of WAS Liberty Profile please copy content of [server.xml.txt](https://github.com/lu-ko/java-ws-soap/blob/master/hotels-package-tours/hpt-core/src/test/resources/was/server.xml.txt) to your WAS instance:
+    * ```<your-was-instance>/usr/servers/<your-server-name>/server.xml```
 
-11. To interact with exposed web services you can use any testing tool (e.g. [SoapUi](http://www.soapui.org/)), see [http://localhost:9080/hptApp/services/HptService.wsdl](http://localhost:9080/hptApp/services/HptService.wsdl)
+3. Deploy WAR to your WAS instance
+  * E.g. In case of WAS Liberty Profile: ```gradle clean deployToLocalhost -Ddropins.dir="<your-was-instance>/usr/servers/<your-server-name>/dropins"```
 
-### ```hpt-schema```
+4. Open web browser and go to URL: [http://localhost:9080/hptApp/ui](http://localhost:9080/hptApp/ui)
 
-1. Import Maven project [hpt-schema](https://github.com/lu-ko/java-ws-soap/tree/master/hotels-package-tours/hpt-schema) to Eclipse IDE
+5. To interact with exposed web services you can use any testing tool (e.g. [SoapUi](http://www.soapui.org/)), see [http://localhost:9080/hptApp/services/HptService.wsdl](http://localhost:9080/hptApp/services/HptService.wsdl)
 
-2. Build project:
-  * ```mvn clean install```
 
 ## Notes
 

@@ -14,3 +14,4 @@ hs_err_pid*
 *.project
 .idea/
 *.iml
+hotels-package-tours/hpt-core/out/
